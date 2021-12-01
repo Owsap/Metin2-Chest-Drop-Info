@@ -43,3 +43,19 @@ if app.__BL_CHEST_DROP_INFO__:
 		def OpenChestDropWindow(self, itemVnum):
 			if self.wndChestDropInfo:
 				self.wndChestDropInfo.Open(itemVnum)
+
+#If you don't have interface(safebox):
+
+#Find
+		wndSafebox = uiSafebox.SafeboxWindow()
+
+#Add
+		wndSafebox.BindInterface(self)
+
+#If you don't have interface(shop):
+
+#Find
+		self.dlgShop.LoadDialog()
+
+#Add
+		self.dlgShop.BindInterface(self)
