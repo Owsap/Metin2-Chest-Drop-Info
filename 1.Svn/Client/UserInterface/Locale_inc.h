@@ -1,0 +1,1 @@
+#define __BL_CHEST_DROP_INFO__

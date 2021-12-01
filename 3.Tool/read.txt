@@ -1,0 +1,2 @@
+use the tool with your special_item_group.txt file
+then transfer the chest_drop file to locale/xx/
