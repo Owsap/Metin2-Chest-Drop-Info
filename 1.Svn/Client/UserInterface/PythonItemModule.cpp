@@ -7,12 +7,12 @@ void initItem()
 
 PyObject* itemHasDropInfo(PyObject* poSelf, PyObject* poArgs)
 {
-	DWORD dwVirtualNumber;
-	if (!PyTuple_GetUnsignedLong(poArgs, 0, &dwVirtualNumber))
+	int iItemIndex;
+	if (!PyTuple_GetInteger(poArgs, 0, &iItemIndex))
 		return Py_BadArgument();
 	
 	CItemData* pItemData;
-	if (!CItemManager::Instance().GetItemDataPointer(dwVirtualNumber, &pItemData))
+	if (!CItemManager::Instance().GetItemDataPointer(iItemIndex, &pItemData))
 		return Py_BuildValue("b", false);
 
 	switch (pItemData->GetType())
@@ -24,7 +24,7 @@ PyObject* itemHasDropInfo(PyObject* poSelf, PyObject* poArgs)
 		return Py_BuildValue("b", false);
 	}
 	
-	const CItemManager::TChestDropItemInfoVec* vDropInfo = CItemManager::Instance().GetItemDropInfoVec(dwVirtualNumber);
+	const CItemManager::TChestDropItemInfoVec* vDropInfo = CItemManager::Instance().GetItemDropInfoVec(iItemIndex);
 	const bool bHasInfo = (vDropInfo != nullptr && (vDropInfo->empty() == false));
 
 	return Py_BuildValue("b", bHasInfo);
@@ -32,14 +32,14 @@ PyObject* itemHasDropInfo(PyObject* poSelf, PyObject* poArgs)
 
 PyObject* itemGetDropInfo(PyObject* poSelf, PyObject* poArgs)
 {
-	DWORD dwVirtualNumber;
-	if (!PyTuple_GetUnsignedLong(poArgs, 0, &dwVirtualNumber))
+	int iItemIndex;
+	if (!PyTuple_GetInteger(poArgs, 0, &iItemIndex))
 		return Py_BadArgument();
 
 	PyObject* poList = PyList_New(0);
 	uint8_t pageCount(0);
 
-	const CItemManager::TChestDropItemInfoVec* vDropInfo = CItemManager::Instance().GetItemDropInfoVec(dwVirtualNumber);
+	const CItemManager::TChestDropItemInfoVec* vDropInfo = CItemManager::Instance().GetItemDropInfoVec(iItemIndex);
 	if (vDropInfo != nullptr && vDropInfo->empty() == false)
 	{
 		CGrid m_Grid(5, 8);
@@ -61,7 +61,7 @@ PyObject* itemGetDropInfo(PyObject* poSelf, PyObject* poArgs)
 				if (iPos >= 0)
 				{
 					m_Grid.Put(iPos, 1, bItemSize);
-					PyList_Append(poList, Py_BuildValue("bik", pageCount, iPos, dwDropVnum));
+					PyList_Append(poList, Py_BuildValue("iii", pageCount, iPos, dwDropVnum));
 					break;
 				}
 				else
@@ -73,7 +73,7 @@ PyObject* itemGetDropInfo(PyObject* poSelf, PyObject* poArgs)
 		}
 	}
 
-	return Py_BuildValue("bO", pageCount, poList);
+	return Py_BuildValue("iO", pageCount, poList);
 }
 #endif
 
