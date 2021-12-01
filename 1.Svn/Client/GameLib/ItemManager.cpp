@@ -23,13 +23,13 @@ bool CItemManager::LoadChestDropInfo(const char* c_szFileName)
 		file.Read(&vecSize, sizeof(vecSize));
 		
 		TChestDropItemInfoVec& vecDrop = m_ItemDropInfoMap[dwItemVnum];
+		vecDrop.reserve(vecSize);
+
 		for (size_t j = 0; j < vecSize; j++)
 		{
 			DWORD dwDropVnum = 0;
 			file.Read(&dwDropVnum, sizeof(dwDropVnum));
-			
-			if (dwDropVnum != 0)
-				vecDrop.push_back(dwDropVnum);
+			vecDrop.push_back(dwDropVnum);
 		}
 		
 		std::sort(vecDrop.begin(), vecDrop.end(), 
